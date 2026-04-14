@@ -1,21 +1,48 @@
 plugins {
-    id("fabric-loom") version "1.9.2" apply false
+    id("fabric-loom") version "1.9.2"
     id("java")
 }
 
-subprojects {
-    apply(plugin = "java")
+group   = "com.denotas"
+version = "1.0.0"
 
-    group = property("maven_group") as String
-    version = property("mod_version") as String
+repositories {
+    maven("https://maven.fabricmc.net/")
+    mavenCentral()
+}
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+dependencies {
+    minecraft("com.mojang:minecraft:1.21.1")
+    mappings("net.fabricmc:yarn:1.21.1+build.3:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.16.5")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+    options.release  = 21
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/hybridcore.accesswidener")
+    mixin {
+        defaultRefmapName.set("hybridcore.refmap.json")
     }
+}
 
-    tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
-        options.release = 21
+tasks.processResources {
+    inputs.property("version", project.version)
+    filteringCharset = "UTF-8"
+    filesMatching("fabric.mod.json") {
+        expand("version" to project.version)
     }
+}
+
+tasks.jar {
+    archiveBaseName.set("hybridcore")
 }
