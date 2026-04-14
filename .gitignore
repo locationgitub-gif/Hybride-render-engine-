@@ -1,7 +1,3 @@
-# Ignore Gradle cache and build artifacts for the HybridCore project
-HybridCore/.gradle/
-HybridCore/build/
-HybridCore/**/build/
-HybridCore/**/out/
-HybridCore/**/*.iml
-HybridCore/.DS_Store
+build/
+.gradle/
+out/
